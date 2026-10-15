@@ -1,3 +1,4 @@
+
 name: Build Darsyar APK
 
 on:
@@ -17,7 +18,7 @@ jobs:
         run: |
           mkdir -p app
           unzip -o darsyar_dahom_source.zip -d app
-          find app -maxdepth 4 -type f
+          find app -name pubspec.yaml
 
       - name: Check Flutter project
         run: |
@@ -35,6 +36,7 @@ jobs:
         run: |
           PROJECT_DIR="$(dirname "$(find app -name pubspec.yaml | head -n 1)")"
           cd "$PROJECT_DIR"
+          flutter create . --platforms=android
           flutter pub get
           flutter build apk --release
 
@@ -43,3 +45,4 @@ jobs:
         with:
           name: darsyar-dahom-apk
           path: app/**/build/app/outputs/flutter-apk/app-release.apk
+          if-no-files-found: error
